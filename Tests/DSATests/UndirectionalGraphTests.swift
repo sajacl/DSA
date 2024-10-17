@@ -86,4 +86,19 @@ final class UndirectionalGraphTests: XCTestCase {
             }
         }
     }
+
+    func testCreatingGraph() throws {
+        let adjacencyList = [
+            "A": ["B", "C"],
+            "B": ["F"],
+            "C": ["D", "E"],
+            "D": ["C"],
+            "E": ["C"],
+            "F": ["B"]
+        ]
+
+        let graph = try XCTUnwrap(UndirectionalGraph<String>.create(from: adjacencyList, root: "A"))
+
+        graph.rdfs()
+    }
 }
