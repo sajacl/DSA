@@ -1,6 +1,6 @@
 import Foundation
 
-final class BinaryTree<Element> {
+struct BinaryTree<Element> {
     private var root: Node?
 
     init(root: Node? = nil) {
@@ -220,7 +220,7 @@ extension BinaryTree where Element: Equatable {
 }
 
 extension BinaryTree {
-    convenience init?(arrayRepresentation: Array<Element>) {
+    init?(arrayRepresentation: Array<Element>) {
         guard !arrayRepresentation.isEmpty else {
             return nil
         }
@@ -248,7 +248,7 @@ extension BinaryTree {
 }
 
 extension BinaryTree: ExpressibleByArrayLiteral {
-    convenience init(arrayLiteral elements: Element...) {
+    init(arrayLiteral elements: Element...) {
         guard !elements.isEmpty else {
             self.init(root: nil)
             return
