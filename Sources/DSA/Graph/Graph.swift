@@ -1,5 +1,6 @@
 import Foundation
 
+/// Value type `Graph` that represents a directional graph.
 struct Graph<Element> {
     private var root: Node?
 

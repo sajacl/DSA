@@ -54,12 +54,8 @@ struct Stack<Element>: Sequence, Collection, CustomStringConvertible {
 
 extension Stack {
     /// Object that will describe an arbitrary given `Stack`.
-    private final class Descriptor: CustomStringConvertible {
-        var stack: Stack<Element>
-
-        init(stack: Stack<Element>) {
-            self.stack = stack
-        }
+    private struct Descriptor: CustomStringConvertible {
+        let stack: Stack<Element>
 
         var description: String {
             var _description = ""

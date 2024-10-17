@@ -1,5 +1,11 @@
 import Foundation
 
+/// Reference type `LinkedList`, that keeps track of head node.
+/// Append is O(n)
+/// Prepend is O(1)
+/// Remove first is O(1)
+/// Remove last is O(n)
+/// Insert is O(i)
 final class LinkedList<Element: Equatable> {
     private(set) var head: Node?
 
@@ -161,7 +167,7 @@ final class LinkedList<Element: Equatable> {
     }
 
     final class Node {
-        /*private*/ let value: Element
+        fileprivate let value: Element
 
         fileprivate var next: Node?
 
@@ -222,8 +228,6 @@ extension LinkedList {
         let index: UInt
 
         let node: Node?
-
-//        static let zero = Index(tag: 0)
     }
 
     struct IndexingIterator: IteratorProtocol {
@@ -327,7 +331,7 @@ extension LinkedList: ExpressibleByArrayLiteral where Element == Int {
 }
 
 extension LinkedList.Node: CustomStringConvertible {
-    struct NodeDescriptor {
+    private struct NodeDescriptor {
         let node: LinkedList.Node
 
         var description: String {

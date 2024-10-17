@@ -56,7 +56,7 @@ struct Queue<Element>: Sequence, Collection, CustomStringConvertible {
 extension Queue {
     /// Object that will describe an arbitrary given `Queue`.
     private final class Descriptor: CustomStringConvertible {
-        var queue: Queue
+        private var queue: Queue
 
         init(queue: Queue<Element>) {
             self.queue = queue

@@ -1,5 +1,10 @@
 import Foundation
 
+/// Reference type `LinkedList`, that keeps track of head and tail.
+/// Append is O(1)
+/// Prepend is O(1)
+/// Remove first/last is O(1)
+/// Insert is O(i)
 final class DoublyLinkedList<Element> {
     private(set) var head: Node?
     
@@ -161,7 +166,7 @@ extension DoublyLinkedList: ExpressibleByArrayLiteral where Element == Int {
 }
 
 extension DoublyLinkedList.Node: CustomStringConvertible {
-    struct NodeDescriptor {
+    private struct NodeDescriptor {
         let node: DoublyLinkedList.Node
 
         var description: String {
