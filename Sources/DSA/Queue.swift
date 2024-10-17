@@ -1,5 +1,8 @@
 import Foundation
 
+/// Value type `Queue` that is backed by an array.
+/// Enqueue is O(1)
+/// Dequeue is O(n)
 struct Queue<Element>: Sequence, Collection, CustomStringConvertible {
     private var store: [Element] = []
 
@@ -51,6 +54,7 @@ struct Queue<Element>: Sequence, Collection, CustomStringConvertible {
 }
 
 extension Queue {
+    /// Object that will describe an arbitrary given `Queue`.
     private final class Descriptor: CustomStringConvertible {
         var queue: Queue
 

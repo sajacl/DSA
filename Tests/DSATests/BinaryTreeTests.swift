@@ -115,9 +115,43 @@ final class BinaryTreeTests: XCTestCase {
             print(node)
         }
     }
+    /*
+        A
+       / \
+      B   C
+     / \ /
+    D  E F
+     */
+    func testAdjacencyCreating() throws {
+        let list = [
+            "A": ["B", "C"],
+            "B": ["D", "E"],
+            "C": ["F"],
+            "D": [],
+            "E": [],
+            "F": []
+        ]
 
-    func testAdjacencyCreating() {
-        let tree = BinaryTree<String>(adjacencyList: ["A": ["B", "C"]])
+        let tree = try XCTUnwrap(BinaryTree<String>.create(from: list, root: "A"))
+
+        print("\nDFS\n")
+        tree.dfs()
+
+        print("\nRDFS\n")
+        tree.rdfs()
+
+        print("\nBFS\n")
+        tree.bfs()
+    }
+    /*
+        1
+       / \
+      2   3
+     / \ /
+    4  5 6
+     */
+    func testArrayCreation() throws {
+        let tree = try XCTUnwrap(BinaryTree<Int>(arrayRepresentation: [1, 2, 3, 4, 5, 6]))
 
         print("\nDFS\n")
         tree.dfs()

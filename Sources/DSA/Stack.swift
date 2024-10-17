@@ -1,5 +1,8 @@
 import Foundation
 
+/// Value type `Stack` that is backed by an array.
+/// Pushing O(1)
+/// Poping O(n)
 struct Stack<Element>: Sequence, Collection, CustomStringConvertible {
     private var store: [Element] = []
 
@@ -50,6 +53,7 @@ struct Stack<Element>: Sequence, Collection, CustomStringConvertible {
 }
 
 extension Stack {
+    /// Object that will describe an arbitrary given `Stack`.
     private final class Descriptor: CustomStringConvertible {
         var stack: Stack<Element>
 

@@ -81,6 +81,11 @@ final class BinaryTree<Element> {
 
         fileprivate var rightChild: Node?
 
+        var children: ArrayOfTwo<Node> {
+            let _children = [leftChild, rightChild].compactMap { $0 }
+            return ArrayOfTwo(_children)
+        }
+
         init(value: Element) {
             self.value = value
         }
@@ -112,57 +117,6 @@ final class BinaryTree<Element> {
                 return self
             }
         }
-    }
-}
-
-extension BinaryTree where Element == String {
-    /*
-     [A: [B, C]]
-     */
-
-    convenience init(adjacencyList: AdjacencyList) {
-        let _root = adjacencyList.first!
-
-        let rootNode = Node(value: _root.key)
-
-        rootNode.modify { builder in
-            let children = _root.value
-
-            if let left = children.first {
-                let leftNode = Node(value: left)
-                builder.withAddingLeftChild(leftNode)
-            }
-
-            if children.count > 1 {
-                let right = children[1]
-                let rightNode = Node(value: right)
-                builder.withAddingRightChild(rightNode)
-            }
-        }
-
-        //        root =
-        for node in adjacencyList {
-            let rootNode = Node(value: node.key)
-
-            rootNode.modify { builder in
-                let children = node.value
-
-                if let left = children.first {
-                    let leftNode = Node(value: left)
-
-                    builder.withAddingLeftChild(leftNode)
-                }
-
-                if children.count > 1 {
-                    let right = children[1]
-                    let rightNode = Node(value: right)
-
-                    builder.withAddingRightChild(rightNode)
-                }
-            }
-        }
-
-        self.init(root: rootNode)
     }
 }
 
@@ -262,5 +216,66 @@ extension BinaryTree where Element: Equatable {
         }
 
         return false
+    }
+}
+
+extension BinaryTree {
+    convenience init?(arrayRepresentation: Array<Element>) {
+        guard !arrayRepresentation.isEmpty else {
+            return nil
+        }
+
+        // O(n)
+        let nodes = arrayRepresentation.map(Node.init(value:))
+
+        // O(n)
+        for index in 0..<nodes.count {
+            let childIndex = 2 * index
+            let leftIndex = childIndex + 1
+            let rightIndex = childIndex + 2
+
+            if leftIndex < nodes.count {
+                nodes[index].leftChild = nodes[leftIndex]
+            }
+
+            if rightIndex < nodes.count {
+                nodes[index].rightChild = nodes[rightIndex]
+            }
+        }
+
+        self.init(root: nodes.first)
+    }
+}
+
+extension BinaryTree where Element == String {
+    static func create(from adjacencyList: AdjacencyList, root: String) -> BinaryTree? {
+        guard !adjacencyList.isEmpty else {
+            return nil
+        }
+
+        // O(n)
+        let nodes = adjacencyList.keys.map { Node(value: $0) }
+
+        // O(n)
+        for index in 0..<nodes.count {
+            let nodeValue = nodes[index].value
+
+            guard let children = adjacencyList[nodeValue] else {
+                continue
+            }
+
+            // since it's reference type
+            let node = nodes[index]
+
+            if let left = children[safe: 0] {
+                node.leftChild = nodes.first(where: { $0.value == left })
+            }
+
+            if let right = children[safe: 1] {
+                node.rightChild = nodes.first(where: { $0.value == right })
+            }
+        }
+
+        return BinaryTree(root: nodes.first(where: { $0.value == root }))
     }
 }
