@@ -167,7 +167,7 @@ final class LinkedList<Element: Equatable> {
     }
 
     final class Node {
-        fileprivate let value: Element
+        /*fileprivate*/ let value: Element
 
         fileprivate var next: Node?
 
@@ -180,6 +180,10 @@ final class LinkedList<Element: Equatable> {
 extension LinkedList.Node: Equatable {
     static func == (lhs: LinkedList<Element>.Node, rhs: LinkedList<Element>.Node) -> Bool {
         lhs.value == rhs.value
+    }
+
+    static func == (lhs: LinkedList<Element>.Node, rhs: Element) -> Bool {
+        lhs.value == rhs
     }
 }
 
