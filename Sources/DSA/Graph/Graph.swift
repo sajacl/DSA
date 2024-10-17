@@ -1,52 +1,64 @@
 import Foundation
 
-struct Graph<Value> {
-    private var storage: [Node] = []
+struct Graph<Element> {
+    private var root: Node?
 
-    init(storage: [Node]) {
-        self.storage = storage
+    init(root: Node?) {
+        self.root = root
     }
 
-//    mutating func add(_ newNode: Node) {
-//        storage.append(newNode)
-//    }
+    func rdfs() {
+        guard let root else {
+            return
+        }
 
-    mutating func add(_ newValue: Value, neighbours: [Node] = []) {
-        let newNode = Node(value: newValue, neighbours: [])
-
-        storage.append(newNode)
+        _rdfs(root)
     }
 
-    struct Node {
-        let value: Value
+    private func _rdfs(_ node: Node) {
+        // favouring left child
+        print(node.value)
+
+        node.neighbours.forEach { neighbour in
+            _rdfs(neighbour)
+        }
+    }
+
+    final class Node {
+        fileprivate let value: Element
 
         fileprivate var neighbours: [Node]
 
-        init(value: Value, neighbours: [Node]) {
+        init(value: Element, neighbours: [Node] = []) {
             self.value = value
             self.neighbours = neighbours
         }
     }
 }
 
-extension Graph where Value == String {
-    static func create(from adjacencyList: AdjacencyList) -> Graph<String> {
-        var graphNodes: [Node] = []
-
-        for adjacency in adjacencyList {
-            var neighbours: [Node] = []
-
-            for neighbour in adjacency.value {
-                let neighbourNode = Node(value: neighbour, neighbours: [])
-
-                neighbours.append(neighbourNode)
-            }
-
-            let node = Node(value: adjacency.key, neighbours: neighbours)
-
-            graphNodes.append(node)
+extension Graph where Element == String {
+    static func create(from adjacencyList: AdjacencyList, root: String) -> Graph<String>? {
+        guard !adjacencyList.isEmpty else {
+            return nil
         }
 
-        return Graph(storage: graphNodes)
+        let nodes = adjacencyList.keys.map { Node(value: $0) }
+
+        for index in 0..<nodes.count {
+            let node = nodes[index]
+            let adjacencyListKey = node.value
+
+            guard let neighbour = adjacencyList[adjacencyListKey] else {
+                continue
+            }
+
+            neighbour.forEach { value in
+                let neighbourNode = nodes.first(where: { $0.value == value })!
+
+                node.neighbours.append(neighbourNode)
+            }
+        }
+
+        return Graph(root: nodes.first(where: { $0.value == root })!)
     }
 }

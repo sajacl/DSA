@@ -13,7 +13,7 @@ final class GraphTests: XCTestCase {
             "F": []
         ]
 
-        let source = "A" // adjacencyList.keys.first!
+        let source = "A"
 
 //        dfs(adjacencyList, source: source)
 //        rdfs(adjacencyList, source: source)
@@ -59,7 +59,7 @@ final class GraphTests: XCTestCase {
         }
     }
 
-    func testB() {
+    func testCreatingGraph() throws {
         let adjacencyList = [
             "A": ["B", "C"],
             "B": ["F"],
@@ -69,8 +69,8 @@ final class GraphTests: XCTestCase {
             "F": []
         ]
 
-        let graph = Graph<String>.create(from: adjacencyList)
+        let graph = try XCTUnwrap(Graph<String>.create(from: adjacencyList, root: "A"))
 
-        print(graph)
+        graph.rdfs()
     }
 }
