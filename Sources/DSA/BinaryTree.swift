@@ -247,6 +247,35 @@ extension BinaryTree {
     }
 }
 
+extension BinaryTree: ExpressibleByArrayLiteral {
+    convenience init(arrayLiteral elements: Element...) {
+        guard !elements.isEmpty else {
+            self.init(root: nil)
+            return
+        }
+
+        // O(n)
+        let nodes = elements.map(Node.init(value:))
+
+        // O(n)
+        for index in 0..<nodes.count {
+            let childIndex = 2 * index
+            let leftIndex = childIndex + 1
+            let rightIndex = childIndex + 2
+
+            if leftIndex < nodes.count {
+                nodes[index].leftChild = nodes[leftIndex]
+            }
+
+            if rightIndex < nodes.count {
+                nodes[index].rightChild = nodes[rightIndex]
+            }
+        }
+
+        self.init(root: nodes.first)
+    }
+}
+
 extension BinaryTree where Element == String {
     static func create(from adjacencyList: AdjacencyList, root: String) -> BinaryTree? {
         guard !adjacencyList.isEmpty else {
