@@ -75,11 +75,28 @@ final class DoublyLinkedList<Element> {
         }
     }
 
-    func removeLast() {
+    @discardableResult
+    func removeLast() -> Element? {
+        let lastValue = tail?.value
+
         let backwardDescendent = tail?.previous
 
         backwardDescendent?.next = nil
         tail = backwardDescendent
+
+        return lastValue
+    }
+
+    @discardableResult
+    func removeFirst() -> Element? {
+        let firstValue = head?.value
+
+        let forwardDescendent = head?.next
+
+        forwardDescendent?.previous = nil
+        head = forwardDescendent
+
+        return firstValue
     }
 
     final class Node {
