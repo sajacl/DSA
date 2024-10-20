@@ -109,6 +109,46 @@ extension UndirectionalGraph where Element: Hashable {
     }
 }
 
+extension UndirectionalGraph: CustomStringConvertible {
+    var description: String {
+        guard let root = root else {
+            return "Graph is empty."
+        }
+
+        var visited = Set<ObjectIdentifier>()
+        return printNode(node: root, prefix: "", isTail: true, visited: &visited)
+    }
+
+    private func printNode(
+        node: Node,
+        prefix: String,
+        isTail: Bool,
+        visited: inout Set<ObjectIdentifier>
+    ) -> String {
+        let nodeID = ObjectIdentifier(node)
+
+        var description = ""
+
+        if visited.contains(nodeID) {
+            description += "\(prefix)\(isTail ? "└── " : "├── ")\(node.value) (already printed)\n"
+            return description
+        }
+
+        visited.insert(nodeID)
+
+        description = "\(prefix)\(isTail ? "└── " : "├── ")\(node.value)\n"
+
+        let newPrefix = prefix + (isTail ? "    " : "│   ")
+        let count = node.neighbours.count
+        for (i, neighbour) in node.neighbours.enumerated() {
+            let isLast = i == count - 1
+            description += printNode(node: neighbour, prefix: newPrefix, isTail: isLast, visited: &visited)
+        }
+
+        return description
+    }
+}
+
 extension UndirectionalGraph where Element == String {
     static func create(
         from adjacencyList: AdjacencyList,
