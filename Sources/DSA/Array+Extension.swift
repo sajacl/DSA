@@ -13,6 +13,19 @@ extension Array {
         self[j] = iValue
     }
 
+    public mutating func reverseSorted() {
+        self.reverse()
+        for index in 0..<count {
+            swap(index, count - index + 1)
+        }
+    }
+
+    public mutating func sortAndReverse() {
+        for index in 0..<count {
+            swap(index, count - index + 1)
+        }
+    }
+
     subscript(safe index: Self.Index) -> Element? {
         if index < endIndex {
             return self[index]
