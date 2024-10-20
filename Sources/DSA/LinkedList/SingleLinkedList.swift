@@ -166,6 +166,52 @@ final class LinkedList<Element: Equatable> {
         return nil
     }
 
+    // A -> B -> C -> D
+    // B -> C
+    // A <- B
+    func reverse() {
+        var current = head
+        var prev: Node? = nil
+
+        while current != nil {
+            let next = current?.next  // store next node
+
+            current?.next = prev  // reverse current node's pointer
+
+            prev = current        // move pointers one position ahead
+            current = next
+        }
+
+        head = prev
+    }
+
+    func rreverse(current: Node?, prev: Node?) {
+        if current == nil {
+            return
+        }
+
+        let next = current?.next
+
+        current?.next = prev
+
+        rreverse(current: next, prev: current)
+    }
+
+    func reversed() -> Node? {
+        var current = head
+        var prev: Node? = nil
+        var next: Node? = nil
+
+        while current != nil {
+            next = current?.next  // store next node
+            current?.next = prev  // reverse current node's pointer
+            prev = current        // move pointers one position ahead
+            current = next
+        }
+
+        return prev
+    }
+
     final class Node {
         /*fileprivate*/ let value: Element
 
