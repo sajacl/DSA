@@ -35,6 +35,48 @@ extension UndirectionalGraph.Node: Hashable where Element: Hashable {
     }
 }
 
+// Copying
+extension UndirectionalGraph where Element: Hashable {
+    mutating func addNode(value: Element, to parent: Node?) {
+        // COW: Ensure unique reference before mutation
+        if !isKnownUniquelyReferenced(&root) {
+            self.root = deepCopyNode(original: root)
+        }
+
+        let newNode = Node(value: value)
+        parent?.neighbours.append(newNode)
+    }
+
+    // Deep copy method for external use
+    func deepCopy() -> UndirectionalGraph<Element> {
+        let newRoot = deepCopyNode(original: root)
+        return UndirectionalGraph<Element>(root: newRoot)
+    }
+
+    private func deepCopyNode(original: Node?) -> Node? {
+        guard let original = original else { return nil }
+
+        var visited = [Node: Node]()
+        return copyNode(original: original, visited: &visited)
+    }
+
+    private func copyNode(original: Node, visited: inout [Node: Node]) -> Node {
+        if let existingCopy = visited[original] {
+            return existingCopy
+        }
+
+        let nodeCopy = Node(value: original.value)
+        visited[original] = nodeCopy
+
+        for neighbour in original.neighbours {
+            let neighbourCopy = copyNode(original: neighbour, visited: &visited)
+            nodeCopy.neighbours.append(neighbourCopy)
+        }
+
+        return nodeCopy
+    }
+}
+
 // Iteration
 extension UndirectionalGraph where Element: Hashable {
     func rdfs() {
