@@ -136,11 +136,11 @@ final class LinkedListTests: XCTestCase {
     func testReverseLinkedList() {
         let linkedList: LinkedList = [1, 2, 3, 4, 5, 6]
 
+        print(linkedList)
+
         linkedList.reverse()
 
-        for value in linkedList {
-            print(value)
-        }
+        print(linkedList)
     }
 
     func testRecursiveReverseLinkedList() {

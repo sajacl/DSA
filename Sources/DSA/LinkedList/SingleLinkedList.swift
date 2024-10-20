@@ -327,6 +327,7 @@ extension LinkedList {
 }
 
 extension LinkedList: Collection {
+    // TODO: Fix me
     func index(after i: Index) -> Index {
         var indexer = IndexingIterator(list: self)
 
@@ -403,5 +404,17 @@ extension LinkedList.Node: CustomStringConvertible {
     var description: String {
         NodeDescriptor(node: self)
             .description
+    }
+}
+
+extension LinkedList: CustomStringConvertible {
+    var description: String {
+        var _description: String = ""
+
+        for node in self {
+            _description += "\(node.value) -> "
+        }
+
+        return _description + "NULL"
     }
 }
