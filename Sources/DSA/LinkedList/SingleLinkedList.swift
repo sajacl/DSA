@@ -187,6 +187,7 @@ final class LinkedList<Element: Equatable> {
 
     func rreverse(current: Node?, prev: Node?) {
         if current == nil {
+            head = prev
             return
         }
 
