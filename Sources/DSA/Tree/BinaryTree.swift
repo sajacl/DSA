@@ -109,6 +109,19 @@ struct BinaryTree<Element> {
             
             return str
         }
+        
+        func swap(_ otherNode: Node) {
+            let _value = value
+            let _leftChild = leftChild
+            let _rightChild = rightChild
+            
+            value = otherNode.value
+            leftChild = otherNode.leftChild
+            rightChild = otherNode.rightChild
+            
+            otherNode.value = _value
+            otherNode.leftChild = _leftChild
+            otherNode.rightChild = _rightChild
         }
 
         final class Builder {
