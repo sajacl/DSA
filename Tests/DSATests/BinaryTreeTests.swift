@@ -162,4 +162,34 @@ final class BinaryTreeTests: XCTestCase {
         print("\nBFS\n")
         tree.bfs()
     }
+    
+    func testSwapNodes() {
+        let firstNode = BinaryTree.Node(value: 1)
+        // First node children
+        let thirdNode = BinaryTree.Node(value: 3)
+        let fourthNode = BinaryTree.Node(value: 4)
+        
+        firstNode.modify { builder in
+            builder.withAddingLeftChild(thirdNode)
+            builder.withAddingRightChild(fourthNode)
+        }
+        
+        let secondNode = BinaryTree.Node(value: 2)
+        // Second node children
+        let fifthNode = BinaryTree.Node(value: 5)
+        let sixthNode = BinaryTree.Node(value: 6)
+        
+        secondNode.modify { builder in
+            builder.withAddingLeftChild(fifthNode)
+            builder.withAddingRightChild(sixthNode)
+        }
+        
+        print(firstNode)
+        print(secondNode)
+        
+        firstNode.swap(secondNode)
+        
+        print(firstNode)
+        print(secondNode)
+    }
 }

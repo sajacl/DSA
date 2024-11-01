@@ -75,7 +75,7 @@ struct BinaryTree<Element> {
     }
 
     final class Node: CustomStringConvertible {
-        fileprivate let value: Element
+        fileprivate var value: Element
 
         fileprivate var leftChild: Node?
 
@@ -95,7 +95,20 @@ struct BinaryTree<Element> {
         }
 
         var description: String {
-            "\(value)"
+            var str = ""
+            
+            if let leftChild {
+                str += "(\(leftChild.description)) <- "
+            }
+            
+            str += "\(value)"
+            
+            if let rightChild {
+                str += " -> (\(rightChild.description))"
+            }
+            
+            return str
+        }
         }
 
         final class Builder {
