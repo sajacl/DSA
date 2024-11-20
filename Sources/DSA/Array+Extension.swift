@@ -22,8 +22,8 @@ extension Array {
     }
 }
 
-extension Array where Element? == Optional<Element> {
-    var isComplete: Bool {
+extension Array {
+    var isCompleteTree: Bool {
         return isCompleteBinaryTree(self)
     }
 
@@ -59,5 +59,4 @@ extension Array where Element? == Optional<Element> {
 
         return true
     }
-
 }
