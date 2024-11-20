@@ -19,13 +19,14 @@ Basic data structures such as:
 6. Graph
    6.1. Graph
    6.2. UndirectionalGraph
-7. Small test cases to understand data structures beter
+7. Heaps (MinHeap, MaxHeap)
+8. Small test cases to understand data structures beter
 
 ## How to contribute:
 No limitations at all, just do it >:D
 
 ## TODO:
-  1. Implement other tree data structures such as `BinarySearchTree`, `Heap`, `AVLTree`, etc..
+  1. Implement other tree data structures such as `BinarySearchTree`, `AVLTree`, etc..
   2. Implement Graphs
   3. Fix shallow copying
   4. Implement sort algorithms and other operations (e.g swap, reverese)
