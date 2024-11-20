@@ -1,7 +1,29 @@
 import Foundation
 
-struct MinHeap<Element: Comparable> {
-    private var storage: [Element] = []
+/// A generic MinHeap implementation in Swift.
+struct MinHeap<Element: Comparable>: Sequence,
+                                     Collection,
+                                     RandomAccessCollection,
+                                     ExpressibleByArrayLiteral,
+                                     CustomStringConvertible {
+    private var storage: [Element]
+
+    init(storage: [Element]) {
+        self.storage = storage
+
+        for index in stride(from: (storage.count / 2 - 1), through: 0, by: -1) {
+            heapifyDown(from: index)
+        }
+    }
+
+    init(arrayLiteral elements: Element...) {
+        self.init(storage: elements)
+    }
+
+    /// Returns `true` if the heap is empty.
+    var isEmpty: Bool {
+        return storage.isEmpty
+    }
 
     /// Returns the number of elements in the heap.
     var count: Int {
@@ -14,15 +36,15 @@ struct MinHeap<Element: Comparable> {
     }
 
     /// Inserts a new element into the heap.
-    mutating func enqueue(_ newValue: Element) {
-        storage.append(newValue)
+    mutating func enqueue(_ newElement: Element) {
+        storage.append(newElement)
 
-        heapifyUp(from: storage.endIndex - 1)
+        let lastIndex = storage.endIndex - 1
 
-        print(storage)
+        heapifyUp(from: lastIndex)
     }
 
-    private mutating func heapifyUp(from index: Int) {
+    private mutating func heapifyUp(from index: Array<Element>.Index) {
         var currentIndex = index
 
         while let current = storage[safe: currentIndex] {
@@ -43,38 +65,93 @@ struct MinHeap<Element: Comparable> {
             return nil
         }
 
-        let lastIndex = storage.endIndex - 1
-        let rootIndex = 0
+        if storage.count == 1 {
+            return storage.removeLast()
+        } else {
+            let rootIndex = 0
 
-        storage.swapAt(rootIndex, lastIndex)
+            let min = storage[rootIndex]
 
-        let min = storage.removeLast()
+            storage[rootIndex] = storage.removeLast()
 
-        heapifyDown(from: rootIndex)
+            heapifyDown(from: rootIndex)
 
-        print(storage)
-
-        return min
+            return min
+        }
     }
 
-    private mutating func heapifyDown(from index: Int) {
+    private mutating func heapifyDown(from index: Array<Element>.Index) {
         var currentIndex = index
 
         while let current = storage[safe: currentIndex] {
             let leftIndex = (currentIndex * 2) + 1
             let rightIndex = (currentIndex * 2) + 2
 
-            if let leftNode = storage[safe: leftIndex], leftNode < current {
-                storage.swap(currentIndex, leftIndex)
-
-                currentIndex = leftIndex
-            } else if let rightNode = storage[safe: rightIndex], rightNode > current {
-                storage.swap(currentIndex, rightIndex)
-
-                currentIndex = rightIndex
-            } else {
+            guard let left = storage[safe: leftIndex] else {
                 break
             }
+
+            var minIndex: Array<Element>.Index?
+
+            if left < current {
+                minIndex = leftIndex
+            }
+
+            if let right = storage[safe: rightIndex], right < current, right < left {
+                minIndex = rightIndex
+            }
+
+            guard let minIndex else {
+                break
+            }
+
+            storage.swapAt(minIndex, currentIndex)
+            currentIndex = minIndex
         }
     }
+
+    // Sequence
+
+    func makeIterator() -> Iterator {
+        Iterator(heap: self)
+    }
+
+    struct Iterator: IteratorProtocol {
+        private var heap: MinHeap<Element>
+
+        fileprivate init(heap: MinHeap<Element>) {
+            self.heap = heap
+        }
+
+        mutating func next() -> Element? {
+            heap.dequeue()
+        }
+    }
+
+    // Collection
+
+    var startIndex: Array<Element>.Index {
+        storage.startIndex
+    }
+
+    var endIndex: Array<Element>.Index {
+        storage.endIndex
+    }
+
+    subscript(position: Array<Element>.Index) -> Element {
+        storage[position]
+    }
+
+    func index(after i: Array<Element>.Index) -> Int {
+        storage.index(after: i)
+    }
+
+    // CustomStringConvertible
+
+    var description: String {
+        storage.description
+    }
 }
+
+extension MinHeap: Equatable where Element: Equatable {}
+extension MinHeap: Hashable where Element: Hashable {}

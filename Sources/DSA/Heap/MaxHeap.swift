@@ -1,6 +1,10 @@
 import Foundation
 
-struct MaxHeap<Element: Comparable>: Sequence {
+struct MaxHeap<Element: Comparable>: Sequence,
+                                     Collection,
+                                     RandomAccessCollection,
+                                     ExpressibleByArrayLiteral,
+                                     CustomStringConvertible {
     private var storage: [Element]
 
     init(storage: [Element]) {
@@ -9,6 +13,15 @@ struct MaxHeap<Element: Comparable>: Sequence {
         for index in stride(from: (storage.count / 2 - 1), through: 0, by: -1) {
             heapifyDown(from: index)
         }
+    }
+
+    init(arrayLiteral elements: Element...) {
+        self.init(storage: elements)
+    }
+
+    /// Returns `true` if the heap is empty.
+    var isEmpty: Bool {
+        return storage.isEmpty
     }
 
     /// Returns the number of elements in the heap.
@@ -22,8 +35,8 @@ struct MaxHeap<Element: Comparable>: Sequence {
     }
 
     /// Inserts a new element into the heap.
-    mutating func enqueue(_ newValue: Element) {
-        storage.append(newValue)
+    mutating func enqueue(_ newElement: Element) {
+        storage.append(newElement)
 
         heapifyUp(from: storage.endIndex - 1)
     }
@@ -112,19 +125,31 @@ struct MaxHeap<Element: Comparable>: Sequence {
             heap.dequeue()
         }
     }
-}
 
-extension MaxHeap: ExpressibleByArrayLiteral {
-    init(arrayLiteral elements: Element...) {
-        self.init(storage: elements)
+    // Collection
+
+    var startIndex: Array<Element>.Index {
+        storage.startIndex
+    }
+
+    var endIndex: Array<Element>.Index {
+        storage.endIndex
+    }
+
+    subscript(position: Array<Element>.Index) -> Element {
+        storage[position]
+    }
+
+    func index(after i: Array<Element>.Index) -> Int {
+        storage.index(after: i)
+    }
+
+    // CustomStringConvertible
+
+    var description: String {
+        storage.description
     }
 }
 
 extension MaxHeap: Equatable where Element: Equatable {}
 extension MaxHeap: Hashable where Element: Hashable {}
-
-extension MaxHeap: CustomStringConvertible {
-    var description: String {
-        storage.description
-    }
-}
