@@ -25,7 +25,7 @@ struct MaxHeap<Element: Comparable>: Sequence {
     }
 
     /// <#Description#>
-    private mutating func heapifyUp(from index: Int) {
+    private mutating func heapifyUp(from index: Array<Element>.Index) {
         var currentIndex = index
 
         while let current = storage[safe: currentIndex] {
@@ -41,7 +41,6 @@ struct MaxHeap<Element: Comparable>: Sequence {
         }
     }
 
-    /// Extracts the max element from the heap.
     mutating func dequeue() -> Element? {
         guard !storage.isEmpty else {
             return nil
@@ -61,37 +60,34 @@ struct MaxHeap<Element: Comparable>: Sequence {
         }
     }
 
-    private mutating func heapifyDown(from index: Int) {
+    private mutating func heapifyDown(from index: Array<Element>.Index) {
         var currentIndex = index
 
         while let current = storage[safe: currentIndex] {
-            let leftNodeIndex = (currentIndex * 2) + 1
-            let rightNodeIndex = (currentIndex * 2) + 2
+            let leftIndex = (currentIndex * 2) + 1
+            let rightIndex = (currentIndex * 2) + 2
 
-            // Each iteration needs to compare the current vs left & right, not only left/right
-
-            var largestNodeIndex = currentIndex
-
-            guard let leftNode = storage[safe: leftNodeIndex] else {
-                // Not a complete tree
+            guard let left = storage[safe: leftIndex] else {
                 break
             }
 
-            if current < leftNode {
-                largestNodeIndex = leftNodeIndex
+            var maxIndex: Array<Element>.Index? = nil
+
+            if left > current {
+                maxIndex = leftIndex
             }
 
-            if let rightNode = storage[safe: rightNodeIndex], current < rightNode {
-                largestNodeIndex = rightNodeIndex
+            if let right = storage[safe: rightIndex], right > current, right > left {
+                maxIndex = rightIndex
             }
 
-            if largestNodeIndex != currentIndex {
-                storage.swapAt(currentIndex, largestNodeIndex)
-
-                currentIndex = largestNodeIndex
-            } else {
+            guard let maxIndex else {
                 break
             }
+
+            storage.swapAt(currentIndex, maxIndex)
+
+            currentIndex = maxIndex
         }
     }
 
@@ -121,5 +117,14 @@ extension MaxHeap: ExpressibleByArrayLiteral {
         for index in stride(from: (storage.count / 2 - 1), through: 0, by: -1) {
             heapifyDown(from: index)
         }
+    }
+}
+
+extension MaxHeap: Equatable where Element: Equatable {}
+extension MaxHeap: Hashable where Element: Hashable {}
+
+extension MaxHeap: CustomStringConvertible {
+    var description: String {
+        storage.description
     }
 }
