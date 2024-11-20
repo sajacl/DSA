@@ -5,6 +5,10 @@ struct MaxHeap<Element: Comparable>: Sequence {
 
     init(storage: [Element]) {
         self.storage = storage
+
+        for index in stride(from: (storage.count / 2 - 1), through: 0, by: -1) {
+            heapifyDown(from: index)
+        }
     }
 
     /// Returns the number of elements in the heap.
@@ -112,11 +116,7 @@ struct MaxHeap<Element: Comparable>: Sequence {
 
 extension MaxHeap: ExpressibleByArrayLiteral {
     init(arrayLiteral elements: Element...) {
-        self.storage = elements
-
-        for index in stride(from: (storage.count / 2 - 1), through: 0, by: -1) {
-            heapifyDown(from: index)
-        }
+        self.init(storage: elements)
     }
 }
 
