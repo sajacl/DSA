@@ -2,7 +2,6 @@ import XCTest
 @testable import DSA
 
 final class MaxHeapTests: XCTestCase {
-    
     func testMinHeap() {
         var heap = MinHeap<Int>()
         
@@ -70,6 +69,23 @@ final class MaxHeapTests: XCTestCase {
 // [20, 200]
 
 // -20, 0, 4, 10, 10, 15
+    }
+
+    func testStringMinHeap() {
+        var heap = MinHeap<String>()
+
+        heap.enqueue("A")
+        heap.enqueue("B")
+        heap.enqueue("C")
+        heap.enqueue("D")
+        heap.enqueue("E")
+        heap.enqueue("F")
+
+        print(heap.peek())
+
+        for node in heap {
+            print(node)
+        }
     }
 
     /*
@@ -164,6 +180,23 @@ final class MaxHeapTests: XCTestCase {
 // [-20, 0]
 
 // 200, 20, 15, 10, 10, 4
+    }
+
+    func testStringMaxHeap() {
+        var heap = MaxHeap<String>()
+
+        heap.enqueue("A")
+        heap.enqueue("B")
+        heap.enqueue("C")
+        heap.enqueue("D")
+        heap.enqueue("E")
+        heap.enqueue("F")
+
+        print(heap.peek())
+
+        for node in heap {
+            print(node)
+        }
     }
 }
 
